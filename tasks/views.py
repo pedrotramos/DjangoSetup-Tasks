@@ -2,16 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, JsonResponse
 from django.forms.models import model_to_dict
 from django.core import serializers
-from rest_framework import serializers
+from rest_framework import serializers as rf_serializers
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from tasks.models import Task
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(rf_serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ("id", "title", "date", "description")
+        fields = ("id", "title", "pub_date", "description")
 
 
 @api_view(["GET"])
@@ -51,7 +51,7 @@ def alter_task(request, task_id):
     if "title" in data:
         taskToAlter.title = data["title"]
     if "date" in data:
-        taskToAlter.pub_date = data["date"]
+        taskToAlter.pub_date = data["pub_date"]
     if "description" in data:
         taskToAlter.description = data["description"]
 
