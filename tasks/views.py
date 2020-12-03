@@ -30,7 +30,6 @@ def get_task(request, task_id):
         raise Http404("Task not found! Double check the ID.")
 
 
-@api_view(["POST"])
 def add_task(request):
     data = JSONParser().parse(request)
     serializer = TaskSerializer(data=data)
@@ -68,3 +67,21 @@ def remove_task(request, task_id):
     except Task.DoesNotExist:
         raise Http404("Task does not exist! Double check the ID.")
     return HttpResponse("Task successfully deleted!")
+
+
+@api_view(["GET", "POST"])
+def list_post(request):
+    if request.method == "GET":
+        get_tasks(request)
+    else:
+        add_task(request)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def get_put_del(request, task_id):
+    if request.method == "GET":
+        get_task(request, task_id)
+    elif request.method == PUT:
+        alter_task(request, task_id)
+    else:
+        remove_task(request, task_id)
